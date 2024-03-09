@@ -16,7 +16,7 @@ function createResponse(ok, message, data) {
 router.post('/addsleepentry', authTokenHandler, async (req, res) => {
     const { date, durationInHrs } = req.body;
 
-    if (!date || !duration) {
+    if (!date || !durationInHrs) {
         return res.status(400).json(createResponse(false, 'Please provide date and sleep duration'));
     }
 
@@ -31,6 +31,7 @@ router.post('/addsleepentry', authTokenHandler, async (req, res) => {
     await user.save();
     res.json(createResponse(true, 'Sleep entry added successfully'));
 });
+
 
 router.post('/getsleepbydate', authTokenHandler, async (req, res) => {
     const { date } = req.body;
@@ -55,24 +56,25 @@ router.post('/getsleepbylimit', authTokenHandler, async (req, res) => {
     const { limit } = req.body;
 
     const userId = req.userId;
-    const user = await User.findById({ _id: userId });
+    const user = await User.findById(userId);
 
     if (!limit) {
         return res.status(400).json(createResponse(false, 'Please provide limit'));
     } else if (limit === 'all') {
         return res.json(createResponse(true, 'All sleep entries', user.sleep));
     } else {
-
         let date = new Date();
-        let currentDate = new Date(date.setDate(date.getDate() - parseInt(limit))).getTime();
- 
-        user.sleep = user.sleep.filter((item) => {
-            return new Date(item.date).getTime() >= currentDate;
-        })
+        let currentDate = new Date(date.setDate(date.getDate() - parseInt(limit)));
 
-        return res.json(createResponse(true, `Sleep entries for the last ${limit} days`, user.sleep));
+        // Filter sleep entries to get entries within the last 'limit' days
+        const sleepEntries = user.sleep.filter(item => {
+            return new Date(item.date) >= currentDate;
+        });
+
+        return res.json(createResponse(true, `Sleep entries for the last ${limit} days`, sleepEntries));
     }
 });
+
 
 router.delete('/deletesleepentry', authTokenHandler, async (req, res) => {
     const { date } = req.body;

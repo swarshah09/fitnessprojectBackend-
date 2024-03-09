@@ -52,29 +52,64 @@ router.post('/getwaterbydate', authTokenHandler, async (req, res) => {
 });
 
 // has a bug
-router.post('/getwaterbylimit', authTokenHandler, async (req, res) => {
-    const { limit } = req.body;
+// router.post('/getwaterbylimit', authTokenHandler, async (req, res) => {
+//     const { limit } = req.body;
 
-    const userId = req.userId;
-    const user = await User.findById({ _id: userId });
+//     const userId = req.userId;
+//     const user = await User.findById({ _id: userId });
 
-    if (!limit) {
-        return res.status(400).json(createResponse(false, 'Please provide limit'));
-    } else if (limit === 'all') {
-        return res.json(createResponse(true, 'All water entries', user.water));
-    } else {
-        let date = new Date();
-        let currentDate = new Date(date.setDate(date.getDate() - parseInt(limit))).getTime();
+//     if (!limit) {
+//         return res.status(400).json(createResponse(false, 'Please provide limit'));
+//     } else if (limit === 'all') {
+//         return res.json(createResponse(true, 'All water entries', user.water));
+//     } else {
+//         let date = new Date();
+//         let currentDate = new Date(date.setDate(date.getDate() - parseInt(limit))).getTime();
 
        
-        user.water = user.water.filter((item) => {
-            return new Date(item.date).getTime() >= currentDate;
-        });
+//         user.water = user.water.filter((item) => {
+//             return new Date(item.date).getTime() >= currentDate;
+//         });
 
-        return res.json(createResponse(true, `Water entries for the last ${limit} days`, user.water));
+//         return res.json(createResponse(true, `Water entries for the last ${limit} days`, user.water));
+//     }
+// });
+
+router.post('/getwaterbylimit', authTokenHandler, async (req, res) => {
+    // Destructure the limit from the request body
+    const { limit } = req.body;
+
+    // Get the user ID from the request
+    const userId = req.userId;
+
+    try {
+        // Find the user by ID
+        const user = await User.findById(userId);
+
+        // Check if the limit is provided
+        if (!limit) {
+            return res.status(400).json(createResponse(false, 'Please provide limit'));
+        }
+
+        // Check if the limit is 'all' to return all water entries
+        if (limit === 'all') {
+            return res.json(createResponse(true, 'All water entries', user.water));
+        }
+
+        // Calculate the start date based on the provided limit
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - parseInt(limit));
+
+        // Filter water entries based on the start date
+        const filteredEntries = user.water.filter(entry => new Date(entry.date) >= startDate);
+
+        // Return the filtered water entries
+        return res.json(createResponse(true, `Water entries for the last ${limit} days`, filteredEntries));
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json(createResponse(false, 'Internal Server Error'));
     }
 });
-
 router.delete('/deletewaterentry', authTokenHandler, async (req, res) => {
     const { date } = req.body;
 

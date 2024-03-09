@@ -1,6 +1,8 @@
+// authRoutes.js
+
 const express = require('express');
 const router = express.Router();
-const User = require('../Models/UserSchema')
+const User = require('../Models/UserSchema');
 const errorHandler = require('../Middlewares/errorMiddleware');
 const authTokenHandler = require('../Middlewares/checkAuthToken');
 const jwt = require('jsonwebtoken');
@@ -11,16 +13,16 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'virajj014@gmail.com',
-        pass: 'ardosnjuokezdpwp'
+        user: 'sswar3939@gmail.com',
+        pass: 'lylthahyxjuyzyhn'
     }
-})
+});
 
 router.get('/test', async (req, res) => {
     res.json({
         message: "Auth api is working"
-    })
-})
+    });
+});
 
 function createResponse(ok, message, data) {
     return {
@@ -29,6 +31,19 @@ function createResponse(ok, message, data) {
         data,
     };
 }
+
+router.get('/user', authTokenHandler, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 router.post('/register', async (req, res, next) => {
     console.log(req.body);
@@ -70,7 +85,8 @@ router.post('/register', async (req, res, next) => {
     catch (err) {
         next(err);
     }
-})
+});
+
 router.post('/login', async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -96,7 +112,8 @@ router.post('/login', async (req, res, next) => {
     catch (err) {
         next(err);
     }
-})
+});
+
 router.post('/sendotp', async (req, res) => {
     try {
         const { email } = req.body;
@@ -107,7 +124,7 @@ router.post('/sendotp', async (req, res) => {
             to: email,
             subject: 'OTP for verification',
             text: `Your OTP is ${otp}`
-        }
+        };
 
         transporter.sendMail(mailOptions, async (err, info) => {
             if (err) {
@@ -121,13 +138,15 @@ router.post('/sendotp', async (req, res) => {
     catch (err) {
         next(err);
     }
-})
+});
+
 router.post('/checklogin', authTokenHandler, async (req, res, next) => {
     res.json({
         ok: true,
         message: 'User authenticated successfully'
-    })
-})
-router.use(errorHandler)
+    });
+});
+
+router.use(errorHandler);
 
 module.exports = router;
