@@ -23,17 +23,12 @@ require('dotenv').config();
 require('./db')
 
 app.use(bodyParser.json());
-const allowedOrigins = ['http://localhost:3000','https://fitnessproject-frontend.vercel.app/'];
+const allowedOrigins = ['http://localhost:3000','https://fitnessproject-frontend.vercel.app'];
 
 app.use(
     cors({
-        origin: function (origin, callback) {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
+        origin: allowedOrigins,
+        methods: ["POST", "GET"],
         credentials: true, // Allow credentials
     })
 );
