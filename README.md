@@ -61,6 +61,14 @@ Create a `.env` file in the root of the project with the following environment v
 PORT=5000
 MONGODB_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
+JWT_REFRESH_SECRET_KEY = your_jwt_secret_key
+JWT_ADMIN_SECRET_KEY = your_jwt_secret_key
+DB_NAME = appname
+COMPANY_EMAIL= your_email
+CLOUDINARY_CLOUD_NAME = your_cloudinary_cloud_name
+CLOUDINARY_API_KEY = your_cloudinary_api_key
+CLOUDINARY_API_SECRET = your_cloudinary_api_secret
+NUTRITION_API_KEY = '......'
 ```
 
 ## API Endpoints
