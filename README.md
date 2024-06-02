@@ -10,8 +10,6 @@ Welcome to the backend of Fitness Freak, a comprehensive MERN stack application 
 - [Configuration](#configuration)
 - [API Endpoints](#api-endpoints)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -45,7 +43,7 @@ Make sure you have the following installed:
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/fitness-freak-backend.git
+git clone https://github.com/swarshah09/fitnessprojectBackend-.git
 cd fitness-freak-backend
 ```
 
@@ -128,15 +126,6 @@ npm start
 
 The backend will be running on the port specified in the `.env` file (default is 5000).
 
-## Contributing
-
-We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ---
 
 Thank you for using Fitness Freak! We hope this app helps you maintain a healthy and active lifestyle. If you have any questions or feedback, feel free to contact us.
-```
