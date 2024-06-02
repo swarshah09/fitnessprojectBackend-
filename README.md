@@ -2,6 +2,8 @@
 
 Welcome to the backend of Fitness Freak, a comprehensive MERN stack application designed to help users track their fitness journey effectively. This backend handles the essential functionalities such as user authentication, workout tracking, calorie intake monitoring, sleep analysis, step count recording, water intake monitoring, weight management, and BMI calculation.
 
+[Link to the Frontend Repository](https://github.com/swarshah09/fitnessprojectFrontend.git)
+
 ## Table of Contents
 
 - [Features](#features)
